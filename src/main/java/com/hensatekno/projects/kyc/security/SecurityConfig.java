@@ -3,6 +3,7 @@ package com.hensatekno.projects.kyc.security;
 import com.hensatekno.projects.kyc.model.enums.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -56,12 +57,60 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.
                 authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/test", "/api/users/login", "/api/users/register").permitAll()
-                        .requestMatchers("/api/test/secured")
-                            .hasRole(Role.USER.name())
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/pekerjaan", "/api/pekerjaan/{id}",
+                                "/api/pendidikan", "/api/pendidikan/{id}",
+                                "/api/cabang", "/api/cabang/{id}",
+                                "/api/jabatan", "/api/jabatan/{id}",
+                                "/api/tujuan", "/api/tujuan/{id}",
+                                "/api/perkiraan_trx", "/api/perkiraan_trx/{id}",
+                                "/api/sumber_dana", "/api/sumber_dana/{id}",
+                                "/api/bidang_usaha", "/api/bidang_usaha/{id}",
+                                "/api/penghasilan", "/api/penghasilan/{id}",
+                                "/api/produk", "/api/produk/{id}"
+                        )
+                            .permitAll()
                         .requestMatchers("/api/users", "/api/users/{id}")
                             .hasRole(Role.ADMIN.name())
-
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/pekerjaan/**",
+                                "/api/pendidikan/**",
+                                "/api/cabang**",
+                                "/api/jabatan/**",
+                                "/api/tujuan/**",
+                                "/api/perkiran_trx/**",
+                                "/api/sumber_dana/**",
+                                "/api/bidang_usaha/**",
+                                "/api/penghasilan/**",
+                                "/api/produk/**"
+                        )
+                            .hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT,
+                                "/api/pekerjaan/**",
+                                "/api/pendidikan/**",
+                                "/api/cabang**",
+                                "/api/jabatan/**",
+                                "/api/tujuan/**",
+                                "/api/perkiran_trx/**",
+                                "/api/sumber_dana/**",
+                                "/api/bidang_usaha/**",
+                                "/api/penghasilan/**",
+                                "/api/produk/**"
+                        )
+                            .hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/api/pekerjaan/**",
+                                "/api/pendidikan/**",
+                                "/api/cabang**",
+                                "/api/jabatan/**",
+                                "/api/tujuan/**",
+                                "/api/perkiran_trx/**",
+                                "/api/sumber_dana/**",
+                                "/api/bidang_usaha/**",
+                                "/api/penghasilan/**",
+                                "/api/produk/**"
+                        )
+                            .hasRole(Role.ADMIN.name())
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(new JwtAuthenticationEntryPoint()))
